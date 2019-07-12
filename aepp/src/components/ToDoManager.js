@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Aepp } from '@aeternity/aepp-sdk'
 import { connect } from 'react-redux'
 import ToDos from './ToDos'
+import Filter from './Filter'
+
 import uuid from 'uuid/v4'
 import KEYS from './../configs/keys'
 
@@ -154,16 +156,8 @@ export class ToDoManager extends Component {
                     <section key={ uuid() } className="main" v-show="allToDos.length" >
                         <ToDos key={ uuid() } todos={ this.props.todos }/>
                     </section>
-                    <footer className="footer" v-show="allToDos.length" >
-                        <span className="todo-count">
-                            {/* <strong>{ remaining }</strong> {{ remaining | pluralize }} left */}
-                        </span>
-                        {/* <ul className="filters"> */}
-                            {/* <li><a @click="manageVisibility('all')" :className="{ selected: visibility == 'all' }">All</a></li>
-                            <li><a @click="manageVisibility('active')" :className="{ selected: visibility == 'active' }">Active</a></li>
-                            <li><a @click="manageVisibility('completed')" :className="{ selected: visibility == 'completed' }">Completed</a></li> */}
-                        {/* </ul> */}
-                    </footer>
+                    
+                    <Filter key={ uuid() }/>
                 </section>
             </div>
         )
