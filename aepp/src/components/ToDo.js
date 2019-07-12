@@ -1,13 +1,27 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 export class ToDo extends Component {
 
-    onAdd() {
-        console.log('on add')
+    onStateChange = async (e) => {
+
+        const { client } = this.props;
+
+        const id = e.target.getAttribute('data-id');
+        const newState = e.target.checked;
+
+        await client.methods.edit_todo_state(id, newState);
+
+        const editedState = {
+            id: parseInt(id),
+            isCompleted: newState
+        }
+
+        this.props.changeState(editedState)
     }
 
-    onStateChange() {
-        console.log('on state change')
+    onTitleEdit() {
+        console.log(`edit todo's title`)
     }
 
     render() {
@@ -21,13 +35,36 @@ export class ToDo extends Component {
                                 />
         */ 
 
+        const todo = this.props.todo
+
         return (
             <div>
-                <span>{ this.props.todo.title }</span> | 
-                <span> is completed: { this.props.todo.isCompleted ? 'true' : 'false' }</span>
+                <input 
+                    type="checkbox" 
+                    data-id={ todo.id } 
+                    checked={ todo.isCompleted } 
+                    onChange={ this.onStateChange }
+                    />
+                <span onDoubleClick={ this.onTitleEdit }>{ todo.title }</span> | 
+                <span> is completed: { todo.isCompleted ? 'true' : 'false' }</span>
             </div>
         )
     }
 }
 
-export default ToDo
+const mapStateToPros = (state) => {
+    return state;
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeState: (todo) => {
+            dispatch({ type: "CHANGE_TODO_STATE", todo });
+        },
+        changeToDoTitle: (todo) => {
+            dispatch({ type: "CHANGE_TODO_TITLE", todo });
+        }
+    }
+}
+
+export default connect(mapStateToPros, mapDispatchToProps)(ToDo)

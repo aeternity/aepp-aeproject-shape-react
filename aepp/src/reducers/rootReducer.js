@@ -1,8 +1,10 @@
 import contractDetails from './../configs/contractDetails'
+import visibility from './../configs/visibility'
 
 const initState = {
     client: null,
     contractDetails,
+    visibility: visibility.ALL,
     todos: []
 }
 
@@ -14,7 +16,7 @@ const rootReducer = (state = initState, action) => {
                 ...state.todos, {
                 id: action.todo.id,
                 title: action.todo.title,
-                isCompleted: false
+                isCompleted: visibility.ACTIVE
             }]
         }
     } else if(action.type === 'ADD_MANY_TODOS') {
@@ -33,6 +35,18 @@ const rootReducer = (state = initState, action) => {
         return {
             ...state,
             client: action.client
+        }
+    } else if (action.type === 'CHANGE_TODO_STATE') {
+
+        state.todos.map(todo => {
+            if(todo.id === action.todo.id) {
+                todo.isCompleted = action.todo.isCompleted;
+            }
+        })
+
+        return {
+            ...state,
+            todos: [ ...state.todos ]
         }
     }
 

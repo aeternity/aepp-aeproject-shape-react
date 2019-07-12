@@ -48,7 +48,7 @@ export class ToDoManager extends Component {
         return parsedToDos;
     }
 
-    convertToTODO(data) {
+    convertToTODO = (data) => {
         return {
             title: data.name,
             isCompleted: data.is_completed
@@ -72,15 +72,6 @@ export class ToDoManager extends Component {
         return tempCollection;
     }
 
-    async componentDidMount() {
-
-        const contractInstance = await this.getClient();
-        this.props.setClient(contractInstance)
-
-        const todos = await this.getToDos(contractInstance);
-        this.props.addManyTodos(todos);
-    }
-
     addTodo = async (e) => {
         if(e.keyCode === 13){
             e.preventDefault();
@@ -99,6 +90,15 @@ export class ToDoManager extends Component {
 
             this.props.addTodo(todo);
         }
+    }
+
+    async componentDidMount() {
+
+        const contractInstance = await this.getClient();
+        this.props.setClient(contractInstance)
+
+        const todos = await this.getToDos(contractInstance);
+        this.props.addManyTodos(todos);
     }
     
     render() {
