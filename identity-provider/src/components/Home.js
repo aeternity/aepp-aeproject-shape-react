@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-// import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Wallet, MemoryAccount } from '@aeternity/aepp-sdk'
 
