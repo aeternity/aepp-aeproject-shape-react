@@ -16,7 +16,9 @@ const rootReducer = (state = initState, action) => {
                 ...state.todos, {
                 id: action.todo.id,
                 title: action.todo.title,
-                isCompleted: visibility.ACTIVE
+                isCompleted: visibility.ACTIVE,
+                editable: false,
+                editedTitle: ''
             }]
         }
     } else if(action.type === 'ADD_MANY_TODOS') {
@@ -41,6 +43,49 @@ const rootReducer = (state = initState, action) => {
         state.todos.map(todo => {
             if(todo.id === action.todo.id) {
                 todo.isCompleted = action.todo.isCompleted;
+            }
+        })
+
+        return {
+            ...state,
+            todos: [ ...state.todos ]
+        }
+    } else if (action.type === 'SET_EDITABLE_TITLE') {
+
+        state.todos.map(todo => {
+            if(todo.id === action.todo.id) {
+                todo.editable = action.todo.isEditable;
+                if(action.todo.isEditable){
+                    todo.editedTitle = action.todo.title;
+                } else {
+                    todo.title = action.todo.title;
+                    todo.editedTitle = ''
+                }
+            }
+        })
+
+        return {
+            ...state,
+            todos: [ ...state.todos ]
+        }
+    } else if (action.type === 'DISCARD_TITLE_CHANGES') {
+
+        state.todos.map(todo => {
+            if(todo.id === action.todo.id) {
+                todo.editable = false;
+                todo.editedTitle = '';
+            }
+        })
+
+        return {
+            ...state,
+            todos: [ ...state.todos ]
+        }
+    } else if (action.type === 'CHANGE_TODO_TITLE') {
+
+        state.todos.map(todo => {
+            if(todo.id === action.todo.id) {
+                todo.editedTitle = action.todo.title;
             }
         })
 

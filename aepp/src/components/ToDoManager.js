@@ -3,6 +3,7 @@ import { Aepp } from '@aeternity/aepp-sdk'
 import { connect } from 'react-redux'
 import ToDos from './ToDos'
 import uuid from 'uuid/v4'
+import KEYS from './../configs/keys'
 
 export class ToDoManager extends Component {
 
@@ -51,7 +52,9 @@ export class ToDoManager extends Component {
     convertToTODO = (data) => {
         return {
             title: data.name,
-            isCompleted: data.is_completed
+            isCompleted: data.is_completed,
+            editable: false,
+            editedTitle: ''
         }
     }
 
@@ -73,7 +76,7 @@ export class ToDoManager extends Component {
     }
 
     addTodo = async (e) => {
-        if(e.keyCode === 13){
+        if(e.keyCode === KEYS.ENTER){
             e.preventDefault();
             let todo = e.target.value;
             e.target.value = '';
@@ -142,7 +145,8 @@ export class ToDoManager extends Component {
 		            <div className="add-todo">
                         
                         <input className="new-todo"
-                            autoFocus autoComplete="off"
+                            autoFocus
+                            autoComplete="off"
                             placeholder="What needs to be done?"
                             onKeyDown={this.addTodo}
                         />
