@@ -3,6 +3,7 @@ import { Aepp } from '@aeternity/aepp-sdk'
 import { connect } from 'react-redux'
 import ToDos from './ToDos'
 import Filter from './Filter'
+import Footer from './Footer'
 
 import uuid from 'uuid/v4'
 import KEYS from './../configs/keys'
@@ -159,6 +160,7 @@ export class ToDoManager extends Component {
                     </section>
                     
                     <Filter key={ uuid() }/>
+                    <Footer key={ uuid() }/>
                 </section>
             </div>
         )

@@ -22,8 +22,8 @@ export class Filter extends Component {
         return (
             <div>
                 {
-                    arr.map(visibility => {
-                        return <span><a 
+                    arr.map((visibility, index )=> {
+                        return <span key={ index }><a 
                         href='about:blank' 
                         data-visibility-type={ visibility.type }
                         onClick={this.changeVisibility}>
