@@ -8,6 +8,10 @@ export class ToDo extends Component {
         return e.target.getAttribute('data-id');
     }
 
+    getDataTitle = (e) => {
+        return e.target.getAttribute('data-title');
+    }
+
     onStateChange = async (e) => {
 
         const { client } = this.props;
@@ -27,11 +31,13 @@ export class ToDo extends Component {
 
     onTitleDoubleClick = (e) => {
         const id = parseInt(this.getDataId(e));
+        const title = this.getDataTitle(e)
 
         this.props.setEditable({ 
             id, 
             isEditable: true,
-            title: e.target.value
+            // title: e.target.value
+            title: title
         })
     }
 
@@ -77,38 +83,41 @@ export class ToDo extends Component {
 
     render() {
 
-        /*
-        <li v-for="(todo, i) in visibleTasks"
-                                // @click="toggleTaskStatus(todo.id)"
-                                className="todo"
-                                // :key="`${i}-${todo.id}`"
-                                // :className="{ completed: todo.isCompleted, editing: todo == editedTodo }"
-                                />
-        */ 
-
         const todo = this.props.todo;
 
         return (
-            <div>
-                <input 
-                    type="checkbox" 
-                    data-id={ todo.id } 
-                    checked={ todo.isCompleted } 
-                    onChange={ this.onStateChange }
+            <li className={ todo.isCompleted ? "todo completed" : "todo" }>
+                <div className="view">
+                    <input 
+                        className="toggle"
+                        type="checkbox" 
+                        data-id={ todo.id } 
+                        checked={ todo.isCompleted } 
+                        onChange={ this.onStateChange }
                     />
+                    
+                    <label
+                        className={ todo.editable ? "hidden" : "" }
+                        data-id={ todo.id }
+                        data-title={ todo.editable ? todo.editedTitle : todo.title }
+                        onDoubleClick={ this.onTitleDoubleClick }
+                        readOnly={ !todo.editable }
+                    >{ todo.title }</label>
+                    
+                </div>
 
-                <input 
-                    type="text" 
-                    data-id={ todo.id }
-                    value={ todo.editable ? todo.editedTitle : todo.title }
-                    onDoubleClick={ this.onTitleDoubleClick }
-                    onChange={ this.onTitleEdit }
-                    readOnly={ !todo.editable }
-                    autoFocus={ todo.editable }
-                    onKeyDown={this.onTitleEditKeyDown}
-                    />
-                <span>  | is completed: { todo.isCompleted ? 'true' : 'false' }</span>
-            </div>
+                <input
+                        className={ !todo.editable ? "hidden" : "" }
+                        data-id={ todo.id }
+                        value={ todo.editable ? todo.editedTitle : todo.title }
+                        // onDoubleClick={ this.onTitleDoubleClick }
+                        onChange={ this.onTitleEdit }
+                        readOnly={ !todo.editable }
+                        autoFocus={ todo.editable }
+                        onKeyUp={this.onTitleEditKeyDown}
+                /> 
+                
+            </li>
         )
     }
 }
@@ -133,5 +142,6 @@ const mapDispatchToProps = (dispatch) => {
         }
     }
 }
+
 
 export default connect(mapStateToPros, mapDispatchToProps)(ToDo)
