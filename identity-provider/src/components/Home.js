@@ -10,7 +10,6 @@ export class Home extends Component {
 
     isRunningInFrame = () => window.parent !== window
 
-    // created = async () => {
     async created() {
 
         const { 
@@ -19,7 +18,9 @@ export class Home extends Component {
             compilerUrl, 
             publicKey, 
             privateKey, 
-            aeppUrl
+            aeppUrl,
+            setHeight,
+            setBalance
         } = this.props;
 
         this.client = await Wallet({
@@ -37,8 +38,13 @@ export class Home extends Component {
         if (!this.isRunningInFrame) this.$refs.aepp.src = aeppUrl
         else window.parent.postMessage({ jsonrpc: '2.0', method: 'ready' }, '*')
 
-        this.height = await this.client.height()
-        this.balance = await this.client.balance(this.pub).catch(() => 0)
+        setHeight(await this.client.height());
+        try {
+            setBalance(await this.client.balance(publicKey))
+        } catch (error) {
+            console.log(error);
+            setBalance(0)
+        }
     }
 
     componentDidMount() {
@@ -50,42 +56,50 @@ export class Home extends Component {
         })
     }
 
+
+
     render() {
 
         const { 
             publicKey,
-            aeppUrl
+            aeppUrl,
+            height,
+            balance
         } = this.props;
 
         return (
             <div key="1">
-                {!this.isRunningInFrame ? (
+                {this.isRunningInFrame ? (
                                 <div>
-                                    <div className="wallet-details">
-                                        <h1 className="">Wallet Aepp</h1>
+                                    <div style={ walletDetails }>
+                                        <h1>Wallet Aepp</h1>
                     
                                         <div className="border">
-                                            <div className="">
-                                                <div className="">
-                                                    <span className="wallet-details-label">Public Key:</span> {publicKey}
+                                            <div>
+                                                <div>
+                                                    <span style={ walletDetailsLabel }>Public Key:</span> {publicKey}
                                                 </div>
                                             </div>
-                                            <div v-if="height" className="">
-                                                <div className="p-2 w-1/4">
-                                                    <span className="wallet-details-label">Height:</span> 
+                                            
+                                            { height > 0 ? (
+                                                <div>
+                                                    <div>
+                                                        <div className="p-2 w-1/4">
+                                                            <span style={ walletDetailsLabel }>Height:</span> { height }
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div className="p-2 w-1/4">
+                                                            <span style={ walletDetailsLabel }>Balance:</span> { balance }
+                                                        </div>
+                                                    </div>    
                                                 </div>
-                                            </div>
-                                            <div v-if="height" className="">
-                                                <div className="p-2 w-1/4">
-                                                    <span className="wallet-details-label">Balance:</span> 
-                                                </div>
-                                            </div>
+                                            ) : '' }
+                                            
                                         </div>
                                     </div>
                     
-
-                                    {/* <!-- external app --> */}
-                                    <iframe title="identity" v-show={aeppUrl} ref="aepp" className="" src="about:blank" frameBorder="1"></iframe>
+                                    <iframe style={ iframe } title="identity" v-show={aeppUrl} ref="aepp" src="about:blank" frameBorder="1"></iframe>
                                 </div>
                 ) : (
                     <p>...</p>
@@ -96,8 +110,40 @@ export class Home extends Component {
     }
 }
 
+// styles
+const walletDetails = {
+    "border": "1px solid #F7286E",
+    "borderRadius": "10px",
+    "padding": "20px 20px 40px 20px",
+    "background": "#311b58",
+    "color": "white",
+    "fontFamily": "Avenir, Helvetica, Arial, sans-serif"
+}
+
+const walletDetailsLabel = {
+    "fontWeight": "bold",
+    "color": "#F7286E"
+}
+
+const iframe = {
+    "marginTop": "20px",
+    "width": "100%",
+    "height": "100vh"
+}
+
 const mapStateToPros = (state) => {
     return state
 }
 
-export default connect(mapStateToPros)(Home)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setHeight: (height) => {
+            dispatch({ type: "SET_HEIGHT", height });
+        },
+        setBalance: (balance) => {
+            dispatch({ type: "SET_BALANCE", balance });
+        }
+    }
+}
+
+export default connect(mapStateToPros, mapDispatchToProps)(Home)
