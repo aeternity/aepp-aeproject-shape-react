@@ -101,9 +101,7 @@ export class Home extends Component {
                     
                                     <iframe style={ iframe } title="identity" v-show={aeppUrl} ref="aepp" src="about:blank" frameBorder="1"></iframe>
                                 </div>
-                ) : (
-                    <p>...</p>
-                )}
+                ) : '' }
 
             </div>
         )
