@@ -93,6 +93,11 @@ const rootReducer = (state = initState, action) => {
             ...state,
             todos: [ ...state.todos ]
         }
+    } else if (action.type === 'CHANGE_VISIBILITY') {
+        return {
+            ...state,
+            visibility: parseInt(action.visibility)
+        }
     }
 
     return state;

@@ -2,15 +2,20 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 const arr = [
-    { type: 'All', value: -1 },
-    { type: 'Active', value: 0 },
-    { type: 'Completed', value: 1 },
+    { name: 'All', type: -1 },
+    { name: 'Active', type: 0 },
+    { name: 'Completed', type: 1 },
 ]
 
 export class Filter extends Component {
 
-    filterTodos = (e) => {
-        console.log('filterTodos')
+    getVisibilityType = (e) => {
+        return e.target.getAttribute('data-visibility-type');
+    }
+
+    changeVisibility = (e) => {
+        e.preventDefault();
+        this.props.changeVisibility(this.getVisibilityType(e))
     }
 
     render() {
@@ -20,10 +25,10 @@ export class Filter extends Component {
                     arr.map(visibility => {
                         return <span><a 
                         href='about:blank' 
-                        data-visibility-value={ visibility.value }
-                        onClick={this.filterTodos}>
-                        { visibility.type }
-                        </a></span>
+                        data-visibility-type={ visibility.type }
+                        onClick={this.changeVisibility}>
+                        { visibility.name }
+                        </a> </span>
                     })
                 }
             </div>
@@ -35,4 +40,12 @@ const mapStateToPros = (state) => {
     return state;
 }
 
-export default connect(mapStateToPros)(Filter)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeVisibility: (visibility) => {
+            dispatch({ type: "CHANGE_VISIBILITY", visibility });
+        }
+    }
+}
+
+export default connect(mapStateToPros, mapDispatchToProps)(Filter)

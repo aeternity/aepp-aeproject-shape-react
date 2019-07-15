@@ -1,8 +1,5 @@
-const COMPLETED = 1;
-const ACTIVE = 2;
-
 export default {
-    COMPLETED: COMPLETED,
-    ACTIVE: ACTIVE,
-    ALL: COMPLETED | ACTIVE 
+    ALL: -1,
+    ACTIVE: 0,
+    COMPLETED: 1
 }

@@ -6,6 +6,7 @@ import Filter from './Filter'
 
 import uuid from 'uuid/v4'
 import KEYS from './../configs/keys'
+import visibility from './../configs/visibility'
 
 export class ToDoManager extends Component {
 
@@ -54,7 +55,7 @@ export class ToDoManager extends Component {
     convertToTODO = (data) => {
         return {
             title: data.name,
-            isCompleted: data.is_completed,
+            isCompleted: data.is_completed ? visibility.COMPLETED : visibility.ACTIVE,
             editable: false,
             editedTitle: ''
         }
