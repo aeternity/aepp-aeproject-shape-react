@@ -2,7 +2,12 @@ import React, { Component } from 'react'
 import { Aepp } from '@aeternity/aepp-sdk'
 import { connect } from 'react-redux'
 import ToDos from './ToDos'
+import Filter from './Filter'
+import Footer from './Footer'
+
 import uuid from 'uuid/v4'
+import KEYS from './../configs/keys'
+import visibility from './../configs/visibility'
 
 export class ToDoManager extends Component {
 
@@ -48,10 +53,12 @@ export class ToDoManager extends Component {
         return parsedToDos;
     }
 
-    convertToTODO(data) {
+    convertToTODO = (data) => {
         return {
             title: data.name,
-            isCompleted: data.is_completed
+            isCompleted: data.is_completed ? visibility.COMPLETED : visibility.ACTIVE,
+            editable: false,
+            editedTitle: ''
         }
     }
 
@@ -72,17 +79,8 @@ export class ToDoManager extends Component {
         return tempCollection;
     }
 
-    async componentDidMount() {
-
-        const contractInstance = await this.getClient();
-        this.props.setClient(contractInstance)
-
-        const todos = await this.getToDos(contractInstance);
-        this.props.addManyTodos(todos);
-    }
-
     addTodo = async (e) => {
-        if(e.keyCode === 13){
+        if(e.keyCode === KEYS.ENTER){
             e.preventDefault();
             let todo = e.target.value;
             e.target.value = '';
@@ -99,6 +97,15 @@ export class ToDoManager extends Component {
 
             this.props.addTodo(todo);
         }
+    }
+
+    async componentDidMount() {
+
+        const contractInstance = await this.getClient();
+        this.props.setClient(contractInstance)
+
+        const todos = await this.getToDos(contractInstance);
+        this.props.addManyTodos(todos);
     }
     
     render() {
@@ -142,7 +149,8 @@ export class ToDoManager extends Component {
 		            <div className="add-todo">
                         
                         <input className="new-todo"
-                            autoFocus autoComplete="off"
+                            autoFocus
+                            autoComplete="off"
                             placeholder="What needs to be done?"
                             onKeyDown={this.addTodo}
                         />
@@ -150,16 +158,9 @@ export class ToDoManager extends Component {
                     <section key={ uuid() } className="main" v-show="allToDos.length" >
                         <ToDos key={ uuid() } todos={ this.props.todos }/>
                     </section>
-                    <footer className="footer" v-show="allToDos.length" >
-                        <span className="todo-count">
-                            {/* <strong>{ remaining }</strong> {{ remaining | pluralize }} left */}
-                        </span>
-                        {/* <ul className="filters"> */}
-                            {/* <li><a @click="manageVisibility('all')" :className="{ selected: visibility == 'all' }">All</a></li>
-                            <li><a @click="manageVisibility('active')" :className="{ selected: visibility == 'active' }">Active</a></li>
-                            <li><a @click="manageVisibility('completed')" :className="{ selected: visibility == 'completed' }">Completed</a></li> */}
-                        {/* </ul> */}
-                    </footer>
+                    
+                    <Filter key={ uuid() }/>
+                    <Footer key={ uuid() }/>
                 </section>
             </div>
         )

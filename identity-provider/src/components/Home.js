@@ -13,9 +13,6 @@ export class Home extends Component {
     // created = async () => {
     async created() {
 
-        console.log('init state...')
-        console.log(this.props)
-
         const { 
             url, 
             internalUrl, 
@@ -59,9 +56,6 @@ export class Home extends Component {
             publicKey,
             aeppUrl
         } = this.props;
-
-        // console.log(this.props)
-        // TODO: get aepp port from user!
 
         return (
             <div key="1">

@@ -1,5 +1,5 @@
 export default {
-    contractAddress: 'ct_SPRKqccKyPVt7AyrRo8C6XMAonqMrCm2USK2r8ziJvoh1TY9C',
+    contractAddress: 'ct_HVb6d4kirgqzY1rShmzRTRwukcsXobjHcpLVD2EggoHmn6wt2',
     contractSource: `contract ToDoManager =
 
     record todo = {
