@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import visibilityEnum from './../configs/visibility'
 
 const arr = [
     { name: 'All', type: -1 },
@@ -19,19 +20,26 @@ export class Filter extends Component {
     }
 
     render() {
+
+        const visibility = this.props.visibility;
+
         return (
-            <div>
+            <ul className="filters">
                 {
                     arr.map((visibility, index )=> {
-                        return <span key={ index }><a 
-                        href='about:blank' 
-                        data-visibility-type={ visibility.type }
-                        onClick={this.changeVisibility}>
-                        { visibility.name }
-                        </a> </span>
+                        return <li key={ index }>
+                                    <a 
+                                        href='about:blank' 
+                                        data-visibility-type={ visibility.type }
+                                        onClick={this.changeVisibility}
+                                        // className="all"
+                                        >
+                                        { visibility.name }
+                                    </a>
+                                </li>
                     })
                 }
-            </div>
+            </ul>
         )
     }
 }

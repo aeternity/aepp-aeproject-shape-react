@@ -13,9 +13,9 @@ export class Footer extends Component {
             }
         })
 
-        return <div>
+        return <span className="todo-count">
             <strong>{ remainingToDos }</strong> { remainingToDos === 1 ? 'item' : 'items'} left
-        </div>
+        </span>
     }
 }
 
