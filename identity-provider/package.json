@@ -8,7 +8,7 @@
     "react-redux": "^7.1.0",
     "react-scripts": "3.0.1",
     "redux": "^4.0.3",
-    "@aeternity/aepp-sdk": "git://github.com/aeternity/aepp-sdk-js.git#develop"
+    "@aeternity/aepp-sdk": "4.2.0"
   },
   "scripts": {
     "start": "PORT=8081 react-scripts start",
